@@ -1,51 +1,49 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./ToDo.css";
 import AddToDo from "./AddToDo";
 import FilterToDo from "./FilterToDo";
 import ItemToDo from "./ItemToDo";
 import toDoItems from "./toDoItems";
 import { nanoid } from "nanoid";
+import todoReducer from "../../reducers/todoReducer";
 
 const ToDoList = () => {
-  const [tasks, setTasks] = useState(toDoItems);
+  const [tasks, dispatch] = useReducer(todoReducer, []);
   const [filter, setFilter] = useState("All task");
 
+  useEffect(() => { 
+    dispatch({
+      type: "fill",
+      payload: JSON.parse(localStorage.getItem("tasks")) || toDoItems,
+    });
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+   }, [tasks]);
+
+
   const addTask = (title) => {
-    const newTasks = [
-      ...tasks,
-      {
+    dispatch({
+      type: "add",
+      payload: {
         id: nanoid(),
         title: title,
         done: false,
       },
-    ];
-
-    setTasks(newTasks);
+    });
   };
 
   const removeTask = (id) => {
-    const newTasks = tasks.filter((item) => item.id !== id);
-    setTasks(newTasks);
+    dispatch({ type: 'delete', payload: id });
   };
 
   const toggleDoneTask = (id) => {
-    const newTasks = tasks.map((item) => {
-      if (item.id === id) {
-        return { ...item, done: !item.done };
-      }
-      return item;
-    });
-    setTasks(newTasks);
+    dispatch({ type: "toggleDone", payload: id });
   };
 
   const updateTask = (id, title) => {
-     const newTasks = tasks.map((item) => {
-       if (item.id === id) {
-         return { ...item, title: title };
-       }
-       return item;
-     });
-     setTasks(newTasks);
+    dispatch({ type: "update", payload: {id, title} });
   }
 
   const FILTER_MAP = {
@@ -58,7 +56,7 @@ const ToDoList = () => {
   return (
     <div className="todo-list">
       <h1 className="text-primary">ToDo List</h1>
-
+      <div>{tasks.filter(item => item.done).length } of { tasks.length }  </div>
       <AddToDo addTask={addTask} />
 
       <FilterToDo
