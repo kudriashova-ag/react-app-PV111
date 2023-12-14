@@ -7,11 +7,13 @@ import toDoItems from "./toDoItems";
 import { nanoid } from "nanoid";
 import todoReducer from "../../reducers/todoReducer";
 
+
 const ToDoList = () => {
   const [tasks, dispatch] = useReducer(todoReducer, []);
+
   const [filter, setFilter] = useState("All task");
 
-  useEffect(() => { 
+  useEffect(() => {
     dispatch({
       type: "fill",
       payload: JSON.parse(localStorage.getItem("tasks")) || toDoItems,
@@ -20,8 +22,7 @@ const ToDoList = () => {
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-   }, [tasks]);
-
+  }, [tasks]);
 
   const addTask = (title) => {
     dispatch({
@@ -35,7 +36,7 @@ const ToDoList = () => {
   };
 
   const removeTask = (id) => {
-    dispatch({ type: 'delete', payload: id });
+    dispatch({ type: "delete", payload: id });
   };
 
   const toggleDoneTask = (id) => {
@@ -43,20 +44,22 @@ const ToDoList = () => {
   };
 
   const updateTask = (id, title) => {
-    dispatch({ type: "update", payload: {id, title} });
-  }
+    dispatch({ type: "update", payload: { id, title } });
+  };
 
   const FILTER_MAP = {
-    'All task': () => true,
-    ToDo: item => !item.done,
-    Done: item => item.done
-  }
-
+    "All task": () => true,
+    ToDo: (item) => !item.done,
+    Done: (item) => item.done,
+  };
 
   return (
     <div className="todo-list">
+     
       <h1 className="text-primary">ToDo List</h1>
-      <div>{tasks.filter(item => item.done).length } of { tasks.length }  </div>
+      <div>
+        {tasks.filter((item) => item.done).length} of {tasks.length}{" "}
+      </div>
       <AddToDo addTask={addTask} />
 
       <FilterToDo

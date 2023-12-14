@@ -1,13 +1,13 @@
-import logo from './logo.svg';
+import { Outlet } from 'react-router-dom';
 import './App.css';
-import ToDoList from './components/ToDo/ToDoList';
-import Counter from './components/Counter/Counter';
+import Header from './components/Header/Header';
 
 function App() {
   return (
     <div>
-      <Counter />
-      <ToDoList />
+      <Header />
+      <Outlet />
+      
     </div>
   );
 }
