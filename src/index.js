@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
@@ -8,6 +8,8 @@ import ToDoList from './components/ToDo/ToDoList';
 import Counter from './components/Counter/Counter';
 import Users from './components/Users/Users';
 import User from './components/Users/User';
+import { themeContext } from './contexts/themeContext';
+import ThemeProvider from './providers/ThemeProvider';
 
 
 const router = createBrowserRouter([
@@ -22,16 +24,21 @@ const router = createBrowserRouter([
       },
       {
         path: '/todo',
-        element: <ToDoList/>
+        element: <ToDoList />
       },
       {
         path: '/users',
-        element: <Users />
+        element: <Users />,
+        children: [
+          {
+            path: ':id',
+            element: <User />
+          },
+        ]
       },
-      {
-        path: '/users/:id',
-        element: <User />
-      },
+
+
+
     ]
   },
 ]);
@@ -40,7 +47,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <RouterProvider router={router} />
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   // </React.StrictMode>
 );
 

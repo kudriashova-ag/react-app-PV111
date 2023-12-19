@@ -16,7 +16,7 @@ const User = () => {
 
     useEffect(() => {
       getUser();
-    }, []);
+    }, [id]);
 
     if (user === null)
         return 'Loading...';

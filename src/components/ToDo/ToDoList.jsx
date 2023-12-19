@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import "./ToDo.css";
 import AddToDo from "./AddToDo";
 import FilterToDo from "./FilterToDo";
@@ -6,9 +6,13 @@ import ItemToDo from "./ItemToDo";
 import toDoItems from "./toDoItems";
 import { nanoid } from "nanoid";
 import todoReducer from "../../reducers/todoReducer";
+import { themeContext } from "../../contexts/themeContext";
+import classNames from "classnames";
 
 
 const ToDoList = () => {
+  const { theme } = useContext(themeContext);
+  
   const [tasks, dispatch] = useReducer(todoReducer, []);
 
   const [filter, setFilter] = useState("All task");
@@ -54,7 +58,7 @@ const ToDoList = () => {
   };
 
   return (
-    <div className="todo-list">
+    <div className={classNames('todo-list', {dark: theme==='dark'})}   >
      
       <h1 className="text-primary">ToDo List</h1>
       <div>
